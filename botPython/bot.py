@@ -10,13 +10,8 @@ def main():
     maestro = BotMaestroSDK.from_sys_args()
     execution = maestro.get_execution()
 
-    # Primeiro projeto com dado fixo
-
-    # cep que funciona
-    # cep = "01310-100"
-
-    # cep que não funciona
-    cep = "12345-678"
+    # Obtendo o CEP a ser consultado via parâmetro da tarefa
+    cep = execution.parameters.get("cep")
 
     bot = WebBot()
     bot.headless = False
