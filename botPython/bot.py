@@ -14,21 +14,51 @@ def main():
     bot.headless = False
     bot.browser = Browser.FIREFOX
     bot.driver_path = r"resources\geckodriver.exe"
-
     try:
         datapool = maestro.get_datapool("Datapool_Consulta_CEP_Correios")
-
         if datapool.is_active():
             while datapool.has_next():
+                # adicionar um contador para o insights saber quantos foram processados
+                 
                 item = datapool.next(task_id=execution.task_id)
-                consulta_cep(item, bot, maestro, execution)
-                item.report_done()
-        else:
-            raise Exception("Datapool não está ativo.")
 
-        status_finalizacao = AutomationTaskFinishStatus.SUCCESS
-        messagem_finalizacao = "Tarefa finalizada com sucesso."
-        
+                # considerar este trecho principalmente em questão de paralelismo
+                if item is None:
+                    # item poderia ser 'None', caso outro processo o consumisse antes
+                    break
+
+                try:
+                    consulta_cep(item, bot, maestro, execution)
+                    item.report_done()
+
+                except Exception as erro:
+                    # adicionar um contador para o insights saber quantos foram executados com falha
+
+                    item.report_error()
+
+                    bot.save_screenshot("erro.png")
+
+                    # Registrando erro
+                    maestro.error(
+                        task_id=execution.task_id,
+                        exception=erro,
+                        screenshot="erro.png",
+                        tags={"cep": item["cep"]}
+                    )
+
+                    # Registrando arquivo de resultado
+                    maestro.post_artifact(
+                        task_id=execution.task_id,
+                        artifact_name="erro.png",
+                        filepath="erro.png"
+                    )
+
+        else:
+            raise Exception("Datapool inativo.")
+
+        status=AutomationTaskFinishStatus.SUCCESS
+        message="Tarefa finalizada com sucesso."
+
     except Exception as erro:
         bot.save_screenshot("erro.png")
 
@@ -39,19 +69,18 @@ def main():
             screenshot="erro.png"
         )
 
-        item.report_error()
-
-        status_finalizacao = AutomationTaskFinishStatus.FAILED
-        messagem_finalizacao = "Tarefa finalizada com erro."
+        status=AutomationTaskFinishStatus.FAILED
+        message="Tarefa finalizada com erro."
 
     finally:
         bot.stop_browser()
 
         maestro.finish_task(
             task_id=execution.task_id,
-            status=status_finalizacao,
-            message=messagem_finalizacao
+            status=status,
+            message=message
         )
+    
 
 def consulta_cep(item: DataPoolEntry, bot: WebBot, maestro: BotMaestroSDK, execution: BotExecution):
     
@@ -75,7 +104,14 @@ def consulta_cep(item: DataPoolEntry, bot: WebBot, maestro: BotMaestroSDK, execu
     tabela_enderecos = bot.find_element("resultado-DNEC", By.ID)
     tabela_enderecos = table_to_dict(tabela_enderecos)[0]
 
-    print(tabela_enderecos)
+    bot.save_screenshot("sucesso.png")
+
+    # Registrando arquivo de resultado
+    maestro.post_artifact(
+        task_id=execution.task_id,
+        artifact_name="sucesso.png",
+        filepath="sucesso.png"
+    )
 
     bot.wait(100)
 
@@ -90,8 +126,9 @@ def consulta_cep(item: DataPoolEntry, bot: WebBot, maestro: BotMaestroSDK, execu
         }
     )      
 
-    botao_nova_busca = bot.find_element("btn_nbusca", By.ID)
-    botao_nova_busca.click()
+    bot.stop_browser()
+    # botao_nova_busca = bot.find_element("btn_nbusca", By.ID)
+    # botao_nova_busca.click()
 
 if __name__ == '__main__':
     main()
