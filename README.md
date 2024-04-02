@@ -1,2 +1,2 @@
-# rpa-consulta-cep-em-lote
-Este projeto open source é para fazer consulta de CEP no site dos Correios do Brasil em lote.
+# Orientações
+Siga as orientações do projeto indicadas no [readme.md da branch main](https://github.com/morgannadev/rpa-consulta-cep-em-lote/blob/main/README.md).
