@@ -4,6 +4,8 @@ Neste projeto, temos três versões de uma automação web RPA, desenvolvida em 
 - [2ª versão](https://github.com/morgannadev/rpa-consulta-cep-em-lote/tree/projeto-com-parametro): Branch "projeto-com-parametro". Nessa versão, a automação consulta CEPs enviados via parâmetro no Orquestrador;
 - [3ª versão](https://github.com/morgannadev/rpa-consulta-cep-em-lote/tree/projeto-para-executar-em-lote): Branch "projeto-para-executar-em-lote". Nessa versão, a automação consulta CEPs em lote, enviados por um CSV pelo Orquestrador.
 
+Você pode seguir o passo a passo do desenvolvimento [nesta live](https://www.youtube.com/watch?v=45ZqN-DkWos) que ficou gravada e disponível no YouTube.
+
 # Preparar o ambiente
 Para executar este projeto, você deverá fazer a etapa de [pré-requisitos desta documentação](https://documentation.botcity.dev/pt/getting-started/prerequisites/), que basicamente são os itens abaixo.
 
