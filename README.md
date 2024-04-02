@@ -66,6 +66,8 @@ Quando estamos executando o robô no Orquestrador, a tarefa será criada, então
 
 Lembre-se de seguir as orientações da [documentação](https://documentation.botcity.dev/pt/tutorials/orchestrating-your-automation/) para fazer o deploy da sua automação no Orquestrador e executar com apoio do Runner.
 
+Também deixo como sugestão você realizar o curso (gratuito e em Português, com certificado) sobre [Orquestração de Python RPA](https://developers.botcity.dev/academy/orchestration), com orientações sobre como utilizar, como configurar as funcionalidades e acompanhar o gerenciamento da sua automação no dia-a-dia.
+
 # Para criar o Execution Log no BotCity Orquestrador
 Siga as orientações da documentação: funcionalidade [Logs de Execução](https://documentation.botcity.dev/pt/maestro/features/logs/) e como utilizar o [SDK](https://documentation.botcity.dev/pt/maestro/maestro-sdk/log/).
 
